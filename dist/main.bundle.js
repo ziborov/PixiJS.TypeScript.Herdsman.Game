@@ -14,17 +14,17 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./src/Enemy.ts":
-/*!**********************!*\
-  !*** ./src/Enemy.ts ***!
-  \**********************/
+/***/ "./src/Animal.ts":
+/*!***********************!*\
+  !*** ./src/Animal.ts ***!
+  \***********************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Enemy = void 0;
+exports.Animal = void 0;
 const pixi_js_1 = __webpack_require__(/*! pixi.js */ "./node_modules/pixi.js/lib/index.js");
-class Enemy extends pixi_js_1.Sprite {
+class Animal extends pixi_js_1.Sprite {
     constructor(options) {
         super();
         this.isProjectile = true;
@@ -56,10 +56,10 @@ class Enemy extends pixi_js_1.Sprite {
         const rg = Math.round(g1 * p + g2 * q);
         const rb = Math.round(b1 * p + b2 * q);
         // return Number((rr << 16) + (rg << 8) + rb).toString(16)
-        return Enemy.toHex(rr) + Enemy.toHex(rg) + Enemy.toHex(rb);
+        return Animal.toHex(rr) + Animal.toHex(rg) + Animal.toHex(rb);
     }
     setup(options) {
-        let texture = Enemy.textureCache;
+        let texture = Animal.textureCache;
         if (texture == null) {
             const circle = new pixi_js_1.Graphics();
             circle.beginFill(0xffffff);
@@ -67,11 +67,11 @@ class Enemy extends pixi_js_1.Sprite {
             circle.endFill();
             circle.cacheAsBitmap = true;
             texture = options.app.renderer.generateTexture(circle);
-            Enemy.textureCache = texture;
+            Animal.textureCache = texture;
         }
         this.texture = texture;
         this.scale.set(options.radius * 2 / texture.width, options.radius * 2 / texture.height);
-        const colorStr = Enemy.interpolateColors(Math.random());
+        const colorStr = Animal.interpolateColors(Math.random());
         this.tint = Number.parseInt(colorStr, 16);
     }
     update() {
@@ -98,11 +98,11 @@ class Enemy extends pixi_js_1.Sprite {
         return false;
     }
 }
-Enemy.minColor = 0xff0000;
-Enemy.minColorArray = Enemy.numColorToArray(Enemy.minColor);
-Enemy.maxColor = 0x00ff00;
-Enemy.maxColorArray = Enemy.numColorToArray(Enemy.maxColor);
-exports.Enemy = Enemy;
+Animal.minColor = 0xff0000;
+Animal.minColorArray = Animal.numColorToArray(Animal.minColor);
+Animal.maxColor = 0x00ff00;
+Animal.maxColorArray = Animal.numColorToArray(Animal.maxColor);
+exports.Animal = Animal;
 
 
 /***/ }),
@@ -192,6 +192,7 @@ class Player extends pixi_js_1.Graphics {
         this.damage = options.damage;
         this.health = options.health;
         this.fillColor = options.fillColor;
+        console.log(`this.fillColor:${this.fillColor}`);
         this.draw();
     }
     draw() {
@@ -499,7 +500,7 @@ const ScoreBar_1 = __webpack_require__(/*! ./ScoreBar */ "./src/ScoreBar.ts");
 const Player_1 = __webpack_require__(/*! ./Player */ "./src/Player.ts");
 const logger_1 = __webpack_require__(/*! ./logger */ "./src/logger.ts");
 const Projectile_1 = __webpack_require__(/*! ./Projectile */ "./src/Projectile.ts");
-const Enemy_1 = __webpack_require__(/*! ./Enemy */ "./src/Enemy.ts");
+const Animal_1 = __webpack_require__(/*! ./Animal */ "./src/Animal.ts");
 const Particle_1 = __webpack_require__(/*! ./Particle */ "./src/Particle.ts");
 const StartModal_1 = __webpack_require__(/*! ./StartModal */ "./src/StartModal.ts");
 class ShootingScene extends pixi_js_1.Container {
@@ -605,7 +606,7 @@ class ShootingScene extends pixi_js_1.Container {
             enemy.update();
             if (enemy.isOutOfViewport({ left, top, right, bottom })) {
                 this.enemiesContainer.removeChild(enemy);
-                (0, logger_1.logEnemy)(`Removed enemy out of viewport (${this.enemiesContainer.children.length})`);
+                (0, logger_1.logAnimal)(`Removed enemy out of viewport (${this.enemiesContainer.children.length})`);
             }
         }
         for (const child of this.projectilesContainer.children) {
@@ -659,7 +660,7 @@ class ShootingScene extends pixi_js_1.Container {
                     enemy.radius = enemy.radius - projectile.radius;
                     if (enemy.radius <= 5) {
                         this.enemiesContainer.removeChild(enemy);
-                        (0, logger_1.logEnemy)(`Removed enemy killed (${this.enemiesContainer.children.length})`);
+                        (0, logger_1.logAnimal)(`Removed enemy killed (${this.enemiesContainer.children.length})`);
                     }
                     else {
                         this.scoreBar.addScore(projectile.radius);
@@ -774,7 +775,7 @@ class ShootingScene extends pixi_js_1.Container {
         const angle = Math.atan2(this.player.y - y, this.player.x - x);
         const vx = Math.cos(angle) * velocityAmplifier;
         const vy = Math.sin(angle) * velocityAmplifier;
-        const enemy = new Enemy_1.Enemy({
+        const enemy = new Animal_1.Animal({
             app: this.app,
             radius: rad,
             vx,
@@ -943,13 +944,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.logProjectileTrail = exports.logParticle = exports.logEnemy = exports.logProjectile = exports.logPointerEvent = exports.logLayout = exports.logApp = void 0;
+exports.logProjectileTrail = exports.logParticle = exports.logAnimal = exports.logProjectile = exports.logPointerEvent = exports.logLayout = exports.logApp = void 0;
 const debug_1 = __importDefault(__webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js"));
 exports.logApp = (0, debug_1.default)('shooting-app');
 exports.logLayout = (0, debug_1.default)('shooting-layout');
 exports.logPointerEvent = (0, debug_1.default)('shooting-pointer-event');
 exports.logProjectile = (0, debug_1.default)('shooting-projectile');
-exports.logEnemy = (0, debug_1.default)('shooting-enemy');
+exports.logAnimal = (0, debug_1.default)('shooting-enemy');
 exports.logParticle = (0, debug_1.default)('shooting-particle');
 exports.logProjectileTrail = (0, debug_1.default)('shooting-projectile-trail');
 
@@ -1118,7 +1119,7 @@ exports.logProjectileTrail = (0, debug_1.default)('shooting-projectile-trail');
 /******/ 			return __webpack_require__.O(result);
 /******/ 		}
 /******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunksimple_html5_shooting_game"] = self["webpackChunksimple_html5_shooting_game"] || [];
+/******/ 		var chunkLoadingGlobal = self["webpackChunkPixiJS_TypeScript_Herdsman_Game"] = self["webpackChunkPixiJS_TypeScript_Herdsman_Game"] || [];
 /******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
 /******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();

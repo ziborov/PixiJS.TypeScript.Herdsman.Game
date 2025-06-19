@@ -2,10 +2,10 @@ import { Container, type FederatedPointerEvent, Graphics, ParticleContainer, typ
 import gsap from 'gsap'
 import { ScoreBar } from './ScoreBar'
 import { Player } from './Player'
-import { logEnemy, logLayout, logParticle, logPointerEvent, logProjectile, logProjectileTrail } from './logger'
+import { logAnimal, logLayout, logParticle, logPointerEvent, logProjectile, logProjectileTrail } from './logger'
 import { type IScene } from './SceneManager'
 import { Projectile, type ProjectileTrail } from './Projectile'
-import { Enemy } from './Enemy'
+import { Animal } from './Animal'
 import { Particle } from './Particle'
 import { StartModal } from './StartModal'
 
@@ -123,11 +123,11 @@ export class ShootingScene extends Container implements IScene {
       }
     }
     for (const child of this.enemiesContainer.children) {
-      const enemy: Enemy = child as Enemy
+      const enemy: Animal = child as Animal
       enemy.update()
       if (enemy.isOutOfViewport({ left, top, right, bottom })) {
         this.enemiesContainer.removeChild(enemy)
-        logEnemy(`Removed enemy out of viewport (${this.enemiesContainer.children.length})`)
+        logAnimal(`Removed enemy out of viewport (${this.enemiesContainer.children.length})`)
       }
     }
     for (const child of this.projectilesContainer.children) {
@@ -141,7 +141,7 @@ export class ShootingScene extends Container implements IScene {
     const removedProjectileIds: number[] = []
     for (const child of this.enemiesContainer.children) {
       // detect enemy collision with player
-      const enemy: Enemy = child as Enemy
+      const enemy: Animal = child as Animal
       const distP = Math.hypot(this.player.x - enemy.x, this.player.y - enemy.y)
       if (distP - enemy.radius - this.player.radius < 0) {
         this.endGame()
@@ -182,7 +182,7 @@ export class ShootingScene extends Container implements IScene {
           enemy.radius = enemy.radius - projectile.radius
           if (enemy.radius <= 5) {
             this.enemiesContainer.removeChild(enemy)
-            logEnemy(`Removed enemy killed (${this.enemiesContainer.children.length})`)
+            logAnimal(`Removed enemy killed (${this.enemiesContainer.children.length})`)
           } else {
             this.scoreBar.addScore(projectile.radius)
             gsap.to(enemy, {
@@ -300,7 +300,7 @@ export class ShootingScene extends Container implements IScene {
     const vx = Math.cos(angle) * velocityAmplifier
     const vy = Math.sin(angle) * velocityAmplifier
 
-    const enemy = new Enemy({
+    const enemy = new Animal({
       app: this.app,
       radius: rad,
       vx,

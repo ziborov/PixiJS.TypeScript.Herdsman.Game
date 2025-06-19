@@ -19,6 +19,7 @@ export class Player extends Graphics {
     this.damage = options.damage
     this.health = options.health
     this.fillColor = options.fillColor
+    console.log(`Player this.fillColor:${this.fillColor}`)
     this.draw()
   }
 

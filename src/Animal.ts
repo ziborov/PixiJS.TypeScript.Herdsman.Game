@@ -1,17 +1,17 @@
 import { Sprite, Graphics, type Application, type Texture } from 'pixi.js'
 
-export interface IEnemyOptions {
+export interface IAnimalOptions {
   app: Application
   radius: number
   vx: number
   vy: number
 }
 
-export class Enemy extends Sprite {
+export class Animal extends Sprite {
   static minColor = 0xff0000
-  static minColorArray = Enemy.numColorToArray(Enemy.minColor)
+  static minColorArray = Animal.numColorToArray(Animal.minColor)
   static maxColor = 0x00ff00
-  static maxColorArray = Enemy.numColorToArray(Enemy.maxColor)
+  static maxColorArray = Animal.numColorToArray(Animal.maxColor)
   static textureCache: Texture
   public isProjectile = true
   public app!: Application
@@ -19,7 +19,7 @@ export class Enemy extends Sprite {
   public vx!: number
   public vy!: number
 
-  constructor (options: IEnemyOptions) {
+  constructor (options: IAnimalOptions) {
     super()
     this.app = options.app
     this.radius = options.radius
@@ -54,11 +54,11 @@ export class Enemy extends Sprite {
     const rb = Math.round(b1 * p + b2 * q)
 
     // return Number((rr << 16) + (rg << 8) + rb).toString(16)
-    return Enemy.toHex(rr) + Enemy.toHex(rg) + Enemy.toHex(rb)
+    return Animal.toHex(rr) + Animal.toHex(rg) + Animal.toHex(rb)
   }
 
-  setup (options: IEnemyOptions): void {
-    let texture = Enemy.textureCache
+  setup (options: IAnimalOptions): void {
+    let texture = Animal.textureCache
     if (texture == null) {
       const circle = new Graphics()
       circle.beginFill(0xffffff)
@@ -66,11 +66,11 @@ export class Enemy extends Sprite {
       circle.endFill()
       circle.cacheAsBitmap = true
       texture = options.app.renderer.generateTexture(circle)
-      Enemy.textureCache = texture
+      Animal.textureCache = texture
     }
     this.texture = texture
     this.scale.set(options.radius * 2 / texture.width, options.radius * 2 / texture.height)
-    const colorStr = Enemy.interpolateColors(Math.random())
+    const colorStr = Animal.interpolateColors(Math.random())
     this.tint = Number.parseInt(colorStr, 16)
   }
 

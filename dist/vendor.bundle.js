@@ -1,4 +1,4 @@
-(self["webpackChunksimple_html5_shooting_game"] = self["webpackChunksimple_html5_shooting_game"] || []).push([["vendor"],{
+(self["webpackChunkPixiJS_TypeScript_Herdsman_Game"] = self["webpackChunkPixiJS_TypeScript_Herdsman_Game"] || []).push([["vendor"],{
 
 /***/ "./node_modules/@pixi/accessibility/lib/AccessibilityManager.js":
 /*!**********************************************************************!*\
