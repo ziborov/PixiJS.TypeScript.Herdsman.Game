@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "build": "webpack",
-    "serve": "webpack serve"
+    "serve": "npx webpack serve --allowed-hosts all"
   },
   "keywords": [],
   "author": "Oleksandr Ziborov",

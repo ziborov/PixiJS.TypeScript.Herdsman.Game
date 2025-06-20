@@ -192,7 +192,7 @@ class Player extends pixi_js_1.Graphics {
         this.damage = options.damage;
         this.health = options.health;
         this.fillColor = options.fillColor;
-        console.log(`this.fillColor:${this.fillColor}`);
+        console.log(`Player this.fillColor:${this.fillColor}`);
         this.draw();
     }
     draw() {
