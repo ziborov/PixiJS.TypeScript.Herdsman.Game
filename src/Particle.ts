@@ -29,7 +29,7 @@ export class Particle extends Sprite {
     let texture = Particle.textureCache
     if (texture == null) {
       const circle = new Graphics()
-      circle.beginFill(0xffffff)
+      circle.beginFill(0xff0000)
       circle.drawCircle(0, 0, this.radius)
       circle.endFill()
       circle.cacheAsBitmap = true

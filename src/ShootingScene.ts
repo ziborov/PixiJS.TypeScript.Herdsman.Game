@@ -61,7 +61,7 @@ export class ShootingScene extends Container implements IScene {
 
     this.player = new Player({
       radius: 30,
-      fillColor: 0xffffff,
+      fillColor: 0xff0000,     //Player start color
       damage: 20,
       health: 100
     })
@@ -251,7 +251,7 @@ export class ShootingScene extends Container implements IScene {
       id: ++this.ids,
       app: this.app,
       radius,
-      fillColor: 0xffffff,
+      fillColor: 0xff0000,     //Shooting start color
       vx,
       vy
     })
