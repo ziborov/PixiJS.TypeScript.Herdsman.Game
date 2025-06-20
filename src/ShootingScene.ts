@@ -8,6 +8,7 @@ import { Projectile, type ProjectileTrail } from './Projectile'
 import { Animal } from './Animal'
 import { Particle } from './Particle'
 import { StartModal } from './StartModal'
+import { Settings } from './Settings'
 
 interface IShootingSceneOptions {
   viewWidth: number
@@ -22,7 +23,7 @@ export class ShootingScene extends Container implements IScene {
   public background!: Graphics
 
   public backgroundSettings = {
-    color: 0x00C853
+    color: Settings.backgroundColor
   }
 
   public player!: Player
@@ -60,8 +61,8 @@ export class ShootingScene extends Container implements IScene {
     this.addChild(this.scoreBar)
 
     this.player = new Player({
-      radius: 30,
-      fillColor: 0xFF1744,     //Player start color
+      radius: Settings.playerRadius,
+      fillColor: Settings.playerColor,     //Player start color
       damage: 20,
       health: 100
     })
@@ -241,7 +242,7 @@ export class ShootingScene extends Container implements IScene {
     const relVelocityFactor = 1
     const angle = Math.atan2(diffY, diffX)
     logPointerEvent(`angle=${angle} diffY=${diffY} diffX=${diffX} relVelocityFactor=${relVelocityFactor}`)
-    const radius = 5 + Math.random() * 15
+    const radius = Settings.playerRadius
     const velocityAmplifier = 20
     const cos = Math.cos(angle)
     const sin = Math.sin(angle)
@@ -251,7 +252,7 @@ export class ShootingScene extends Container implements IScene {
       id: ++this.ids,
       app: this.app,
       radius,
-      fillColor: 0xFF1744,     //Shooting start color
+      fillColor: Settings.playerColor,     //Shooting start color
       vx,
       vy
     })
