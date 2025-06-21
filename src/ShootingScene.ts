@@ -28,6 +28,7 @@ export class ShootingScene extends Container implements IScene {
 
   public player!: Player
   public projectilesContainer!: ParticleContainer
+  public projectilesBackContainer!: ParticleContainer
   public animalsContainer!: ParticleContainer
   public particlesContainer!: ParticleContainer
   public scoreBar!: ScoreBar
@@ -53,6 +54,9 @@ export class ShootingScene extends Container implements IScene {
 
     this.projectilesContainer = new ParticleContainer(2000, { scale: true, position: true, tint: true })
     this.addChild(this.projectilesContainer)
+
+    this.projectilesBackContainer = new ParticleContainer(2000, { scale: true, position: true, tint: true })
+    this.addChild(this.projectilesBackContainer)
 
     this.particlesContainer = new ParticleContainer(2000, { scale: true, position: true, tint: true })
     this.addChild(this.particlesContainer)
@@ -138,6 +142,15 @@ export class ShootingScene extends Container implements IScene {
         this.projectilesContainer.removeChild(projectile)
         this.player.visible = true
         logProjectile(`Removed projectile out of viewport (${this.projectilesContainer.children.length})`)
+      } 
+    }
+    for (const child of this.projectilesBackContainer.children) {
+      const projectileBack: Projectile | ProjectileTrail = child as Projectile | ProjectileTrail
+      projectileBack.update(deltaMS)
+      if (projectileBack.isOutOfViewport({ left, top, right, bottom })) {
+        this.projectilesBackContainer.removeChild(projectileBack)
+        this.player.visible = true
+        logProjectile(`Removed projectileBack out of viewport (${this.projectilesBackContainer.children.length})`)
       } 
     }
     const removedProjectileIds: number[] = []
@@ -320,6 +333,9 @@ export class ShootingScene extends Container implements IScene {
     this.scoreBar.clearScore()
     while (this.projectilesContainer.children[0] != null) {
       this.projectilesContainer.removeChild(this.projectilesContainer.children[0])
+    }
+    while (this.projectilesBackContainer.children[0] != null) {
+      this.projectilesBackContainer.removeChild(this.projectilesBackContainer.children[0])
     }
     while (this.animalsContainer.children[0] != null) {
       this.animalsContainer.removeChild(this.animalsContainer.children[0])
