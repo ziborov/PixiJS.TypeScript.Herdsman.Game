@@ -28,7 +28,7 @@ export class ShootingScene extends Container implements IScene {
 
   public player!: Player
   public projectilesContainer!: ParticleContainer
-  public enemiesContainer!: ParticleContainer
+  public animalsContainer!: ParticleContainer
   public particlesContainer!: ParticleContainer
   public scoreBar!: ScoreBar
   public startModal!: StartModal
@@ -48,8 +48,8 @@ export class ShootingScene extends Container implements IScene {
     this.background = new Graphics()
     this.addChild(this.background)
 
-    this.enemiesContainer = new ParticleContainer(2000, { scale: true, position: true, tint: true })
-    this.addChild(this.enemiesContainer)
+    this.animalsContainer = new ParticleContainer(2000, { scale: true, position: true, tint: true })
+    this.addChild(this.animalsContainer)
 
     this.projectilesContainer = new ParticleContainer(2000, { scale: true, position: true, tint: true })
     this.addChild(this.projectilesContainer)
@@ -123,12 +123,12 @@ export class ShootingScene extends Container implements IScene {
         logParticle(`Removed particle out of viewport (${this.particlesContainer.children.length})`)
       }
     }
-    for (const child of this.enemiesContainer.children) {
+    for (const child of this.animalsContainer.children) {
       const enemy: Animal = child as Animal
       enemy.update()
       if (enemy.isOutOfViewport({ left, top, right, bottom })) {
-        this.enemiesContainer.removeChild(enemy)
-        logAnimal(`Removed enemy out of viewport (${this.enemiesContainer.children.length})`)
+        this.animalsContainer.removeChild(enemy)
+        logAnimal(`Removed enemy out of viewport (${this.animalsContainer.children.length})`)
       }
     }
     for (const child of this.projectilesContainer.children) {
@@ -136,11 +136,12 @@ export class ShootingScene extends Container implements IScene {
       projectile.update(deltaMS)
       if (projectile.isOutOfViewport({ left, top, right, bottom })) {
         this.projectilesContainer.removeChild(projectile)
+        this.player.visible = true
         logProjectile(`Removed projectile out of viewport (${this.projectilesContainer.children.length})`)
-      }
+      } 
     }
     const removedProjectileIds: number[] = []
-    for (const child of this.enemiesContainer.children) {
+    for (const child of this.animalsContainer.children) {
       // detect enemy collision with player
       const enemy: Animal = child as Animal
       const distP = Math.hypot(this.player.x - enemy.x, this.player.y - enemy.y)
@@ -153,7 +154,7 @@ export class ShootingScene extends Container implements IScene {
         const projectile: Projectile = _child as Projectile
         if (!projectile.isProjectile) {
           continue
-        }
+        } 
         const dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y)
         if (dist - enemy.radius - projectile.radius < 0) {
           this.projectilesContainer.removeChild(projectile)
@@ -161,7 +162,7 @@ export class ShootingScene extends Container implements IScene {
           removedProjectileIds.push(projectile.id)
           // update score
           this.scoreBar.addScore(100)
-
+          this.player.visible = true
           // create particle Effect
           for (let index = 0; index < enemy.radius * 3; index++) {
             const angleExp = Math.atan2(projectile.y - enemy.y, projectile.x - enemy.x)
@@ -182,8 +183,8 @@ export class ShootingScene extends Container implements IScene {
           // shrink enemy
           enemy.radius = enemy.radius - projectile.radius
           if (enemy.radius <= 5) {
-            this.enemiesContainer.removeChild(enemy)
-            logAnimal(`Removed enemy killed (${this.enemiesContainer.children.length})`)
+            this.animalsContainer.removeChild(enemy)
+            logAnimal(`Removed enemy killed (${this.animalsContainer.children.length})`)
           } else {
             this.scoreBar.addScore(projectile.radius)
             gsap.to(enemy, {
@@ -191,6 +192,8 @@ export class ShootingScene extends Container implements IScene {
               height: enemy.radius * 2
             })
           }
+        } else {
+          this.player.visible = false
         }
       }
     }
@@ -212,7 +215,7 @@ export class ShootingScene extends Container implements IScene {
       }
     }
     if (this.elapsedFrames % 60 === 0) {
-      this.spawnEnemies()
+      this.spawnAnimals()
     }
   }
 
@@ -269,7 +272,7 @@ export class ShootingScene extends Container implements IScene {
     logProjectile(`Added (${this.projectilesContainer.children.length})`)
   }
 
-  spawnEnemies (): void {
+  spawnAnimals (): void {
     const radMax = 30
     const radMin = 15
     const rad = Math.floor(radMin + Math.random() * (radMax - radMin + 1))
@@ -309,7 +312,7 @@ export class ShootingScene extends Container implements IScene {
     })
     enemy.anchor.set(0.5, 0.5)
     enemy.position.set(x, y)
-    this.enemiesContainer.addChild(enemy)
+    this.animalsContainer.addChild(enemy)
   }
 
   startGame = (): void => {
@@ -318,8 +321,8 @@ export class ShootingScene extends Container implements IScene {
     while (this.projectilesContainer.children[0] != null) {
       this.projectilesContainer.removeChild(this.projectilesContainer.children[0])
     }
-    while (this.enemiesContainer.children[0] != null) {
-      this.enemiesContainer.removeChild(this.enemiesContainer.children[0])
+    while (this.animalsContainer.children[0] != null) {
+      this.animalsContainer.removeChild(this.animalsContainer.children[0])
     }
     while (this.particlesContainer.children[0] != null) {
       this.particlesContainer.removeChild(this.particlesContainer.children[0])
